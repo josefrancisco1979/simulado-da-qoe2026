@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulado — Tópico 7 · QOE 2026</title>
+<style>
+:root {
+  --azul: #185FA5;
+  --azul-esc: #0C447C;
+  --azul-cl: #E6F1FB;
+  --verde: #3B6D11;
+  --verde-cl: #EAF3DE;
+  --verm: #A32D2D;
+  --verm-cl: #FCEBEB;
+  --amber: #854F0B;
+  --amber-cl: #FAEEDA;
+  --cinza: #5F5E5A;
+  --cinza-cl: #F1EFE8;
+  --borda: #D3D1C7;
+  --texto: #1a1a18;
+  --bg: #f8f7f4;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; background: var(--bg); color: var(--texto); font-size: 15px; line-height: 1.6; }
+
+/* TELA INICIAL */
+#tela-inicio {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+  text-align: center;
+}
+.inicio-badge {
+  background: var(--azul-cl);
+  color: var(--azul-esc);
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: 4px 14px;
+  border-radius: 20px;
+  margin-bottom: 1rem;
+}
+#tela-inicio h1 {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--azul-esc);
+  margin-bottom: .5rem;
+}
+#tela-inicio p {
+  color: var(--cinza);
+  font-size: 14px;
+  margin-bottom: 1.5rem;
+  max-width: 400px;
+}
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 1.5rem;
+  max-width: 380px;
+}
+.info-card {
+  background: #fff;
+  border: 1px solid var(--borda);
+  border-radius: 8px;
+  padding: .75rem;
+  text-align: center;
+}
+.info-num { font-size: 22px; font-weight: bold; color: var(--azul); }
+.info-label { font-size: 11px; color: var(--cinza); margin-top: 2px; }
+.btn-iniciar {
+  background: var(--azul);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: .85rem 2.5rem;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.btn-iniciar:hover { background: var(--azul-esc); }
+
+/* TELA PROVA */
+#tela-prova { display: none; padding: 0; }
+
+.header-prova {
+  background: var(--azul-esc);
+  color: #fff;
+  padding: .85rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.header-titulo { font-size: 13px; font-weight: bold; opacity: .9; }
+.progresso-texto { font-size: 13px; font-weight: bold; }
+.barra-wrap { height: 4px; background: rgba(255,255,255,.2); }
+.barra-fill { height: 4px; background: #7FC8F8; transition: width .4s ease; }
+
+.questao-wrap {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 5rem;
+}
+.q-num {
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--azul);
+  margin-bottom: .4rem;
+}
+.q-enunciado {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--texto);
+  margin-bottom: 1.25rem;
+  font-family: Georgia, serif;
+}
+.q-enunciado em {
+  font-style: italic;
+}
+.alternativas { display: flex; flex-direction: column; gap: 8px; margin-bottom: 1rem; }
+.alt {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: .75rem 1rem;
+  border: 1.5px solid var(--borda);
+  border-radius: 8px;
+  cursor: pointer;
+  background: #fff;
+  transition: border-color .15s, background .15s;
+}
+.alt:hover { border-color: var(--azul); background: var(--azul-cl); }
+.alt.selecionada { border-color: var(--azul); background: var(--azul-cl); }
+.alt.correta { border-color: var(--verde); background: var(--verde-cl); }
+.alt.errada { border-color: var(--verm); background: var(--verm-cl); }
+.alt.neutra-pos { border-color: var(--verde); background: var(--verde-cl); opacity: .6; }
+.alt-letra {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1.5px solid var(--borda);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+  flex-shrink: 0;
+  color: var(--cinza);
+}
+.alt.selecionada .alt-letra { border-color: var(--azul); color: var(--azul); background: #fff; }
+.alt.correta .alt-letra { border-color: var(--verde); color: var(--verde); background: #fff; }
+.alt.errada .alt-letra { border-color: var(--verm); color: var(--verm); background: #fff; }
+.alt-texto { font-size: 14px; line-height: 1.5; color: var(--texto); padding-top: 2px; }
+
+.feedback {
+  display: none;
+  border-radius: 8px;
+  padding: .85rem 1rem;
+  margin-bottom: 1rem;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.feedback.certo { background: var(--verde-cl); border-left: 3px solid var(--verde); color: #27500A; display: block; }
+.feedback.errado { background: var(--verm-cl); border-left: 3px solid var(--verm); color: #791F1F; display: block; }
+.feedback strong { font-weight: bold; }
+
+.lei-ref {
+  font-size: 12px;
+  color: var(--cinza);
+  background: var(--cinza-cl);
+  border-radius: 6px;
+  padding: .4rem .75rem;
+  margin-bottom: 1.25rem;
+  display: none;
+}
+
+.btn-row { display: flex; gap: 10px; }
+.btn-confirmar {
+  background: var(--azul);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: .7rem 1.5rem;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  flex: 1;
+}
+.btn-confirmar:hover { background: var(--azul-esc); }
+.btn-confirmar:disabled { background: var(--borda); cursor: not-allowed; color: var(--cinza); }
+.btn-avancar {
+  background: var(--azul-esc);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: .7rem 1.5rem;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  flex: 1;
+  display: none;
+}
+.btn-avancar:hover { background: #042C53; }
+
+/* TELA RESULTADO */
+#tela-resultado { display: none; padding: 2rem 1.25rem; max-width: 680px; margin: 0 auto; }
+.resultado-topo { text-align: center; margin-bottom: 2rem; }
+.nota-circulo {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  border: 4px solid;
+}
+.nota-num { font-size: 30px; font-weight: bold; line-height: 1; }
+.nota-den { font-size: 13px; opacity: .7; }
+.resultado-topo h2 { font-size: 20px; margin-bottom: .3rem; }
+.resultado-topo p { font-size: 14px; color: var(--cinza); }
+
+.stats-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 1.5rem; }
+.stat { background: #fff; border: 1px solid var(--borda); border-radius: 8px; padding: .85rem; text-align: center; }
+.stat-num { font-size: 22px; font-weight: bold; }
+.stat-label { font-size: 11px; color: var(--cinza); margin-top: 2px; }
+
+.gabarito-titulo { font-size: 13px; font-weight: bold; text-transform: uppercase; letter-spacing: .06em; color: var(--cinza); margin-bottom: .75rem; }
+.gab-item {
+  background: #fff;
+  border: 1px solid var(--borda);
+  border-radius: 8px;
+  padding: .75rem 1rem;
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+.gab-header { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.gab-icon { width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; flex-shrink: 0; }
+.gab-icon.c { background: var(--verde-cl); color: var(--verde); }
+.gab-icon.e { background: var(--verm-cl); color: var(--verm); }
+.gab-qnum { font-weight: bold; font-size: 13px; }
+.gab-texto { font-size: 12px; color: var(--cinza); line-height: 1.5; margin-left: 28px; }
+.gab-resp { font-size: 12px; margin-left: 28px; margin-top: 2px; }
+.gab-resp span { font-weight: bold; }
+
+.btn-refazer {
+  width: 100%;
+  background: var(--azul);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: .85rem;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 1.5rem;
+}
+.btn-refazer:hover { background: var(--azul-esc); }
+</style>
+</head>
+<body>
+
+<!-- TELA INÍCIO -->
+<div id="tela-inicio">
+  <div class="inicio-badge">QOE PMERJ 2026 · Direito Administrativo</div>
+  <h1>Simulado — Tópico 7</h1>
+  <p>Licitações, Contratos e Orçamento<br>Lei 14.133/2021 · Lei 287/79</p>
+  <div class="info-grid">
+    <div class="info-card"><div class="info-num">20</div><div class="info-label">Questões</div></div>
+    <div class="info-card"><div class="info-num">4</div><div class="info-label">Alternativas</div></div>
+    <div class="info-card"><div class="info-num">70%</div><div class="info-label">Meta mínima</div></div>
+  </div>
+  <button class="btn-iniciar" onclick="iniciar()">Iniciar simulado</button>
+</div>
+
+<!-- TELA PROVA -->
+<div id="tela-prova">
+  <div class="header-prova">
+    <div class="header-titulo">Tópico 7 · QOE 2026</div>
+    <div class="progresso-texto" id="prog-txt">1 / 20</div>
+  </div>
+  <div class="barra-wrap"><div class="barra-fill" id="barra" style="width:5%"></div></div>
+
+  <div class="questao-wrap">
+    <div class="q-num" id="q-num">Questão 1 de 20</div>
+    <div class="q-enunciado" id="q-enunciado"></div>
+    <div class="alternativas" id="alternativas"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="lei-ref" id="lei-ref"></div>
+    <div class="btn-row">
+      <button class="btn-confirmar" id="btn-confirmar" onclick="confirmar()" disabled>Confirmar resposta</button>
+      <button class="btn-avancar" id="btn-avancar" onclick="avancar()">Próxima →</button>
+    </div>
+  </div>
+</div>
+
+<!-- TELA RESULTADO -->
+<div id="tela-resultado"></div>
+
+<script>
+const Q = [
+  {
+    enunciado: "De acordo com a Lei 14.133/2021, são modalidades de licitação pública, EXCETO:",
+    alts: ["Concorrência e pregão.", "Concurso e leilão.", "Diálogo competitivo.", "Tomada de preços e convite."],
+    gabarito: 3,
+    feedback: "A Lei 14.133/2021 extinguiu a tomada de preços e o convite. As cinco modalidades da nova lei são: concorrência, concurso, leilão, pregão e diálogo competitivo.",
+    lei: "Lei 14.133/2021 — modalidades de licitação"
+  },
+  {
+    enunciado: "Assinale o princípio da Lei 14.133/2021 que consiste na distribuição e especialização de funções entre os agentes públicos atuantes nos processos de licitação e contratação pública, com o fim de garantir maior especialização e diminuir riscos de conflitos de interesse:",
+    alts: ["Princípio da publicidade.", "Princípio da segregação das funções.", "Princípio da vinculação ao edital.", "Princípio da competitividade."],
+    gabarito: 1,
+    feedback: "O princípio da segregação das funções (art. 5º) impede que um mesmo agente acumule as funções de elaborar o edital, julgar as propostas e fiscalizar o contrato. Questão idêntica caiu na prova 2023 Q15.",
+    lei: "Lei 14.133/2021, art. 5º — princípios"
+  },
+  {
+    enunciado: "Quanto ao Estudo Técnico Preliminar (ETP), ao Termo de Referência (TR) e ao Projeto Básico (PB), previstos no art. 6º da Lei 14.133/2021, marque a alternativa CORRETA:",
+    alts: ["O Projeto Básico é o documento constitutivo da primeira etapa do planejamento de uma contratação.", "O Termo de Referência precede o Estudo Técnico Preliminar no ciclo de planejamento.", "O Estudo Técnico Preliminar é o documento constitutivo da primeira etapa do planejamento, que traz o interesse público envolvido e sua melhor solução.", "O Edital é elaborado antes do Termo de Referência, inaugurando o planejamento da contratação."],
+    gabarito: 2,
+    feedback: "A ordem correta é: ETP → TR ou PB → Edital. O ETP é sempre a primeira etapa. O TR é usado para serviços e compras; o PB, para obras e serviços de engenharia. Questão baseada na prova 2023 Q16.",
+    lei: "Lei 14.133/2021, art. 6º, incisos XX, XXIII e XXV"
+  },
+  {
+    enunciado: "Em relação ao Sistema de Registro de Preços (SRP), previsto na Lei 14.133/2021, marque a alternativa INCORRETA:",
+    alts: ["O SRP não é uma modalidade de licitação, mas um sistema que racionaliza as compras.", "A regra geral no SRP é a necessidade de reserva orçamentária prévia para a efetivação do registro da ata.", "O objetivo do SRP é racionalizar contratações e efetivar o princípio da economicidade.", "A Administração não está obrigada a contratar após o registro dos preços em ata."],
+    gabarito: 1,
+    feedback: "No SRP, não há necessidade de reserva orçamentária prévia para o registro dos preços. A reserva só é exigida no momento da efetiva contratação. Esse foi exatamente o distrator cobrado na prova 2021 Q26.",
+    lei: "Lei 14.133/2021, art. 6º, inciso XLV — SRP"
+  },
+  {
+    enunciado: "Segundo a Lei 14.133/2021, o credenciamento é:",
+    alts: ["Uma modalidade de licitação aplicável a bens e serviços comuns de qualquer valor.", "Procedimento auxiliar pelo qual a Administração convoca interessados para firmar pré-acordo, sem competição viável entre os participantes.", "Sinônimo de sistema de registro de preços, ambos utilizados para o mesmo fim.", "Procedimento reservado exclusivamente à contratação de serviços de engenharia."],
+    gabarito: 1,
+    feedback: "O credenciamento (art. 6º, XLIII e art. 79) é um procedimento auxiliar — não uma modalidade de licitação. É usado quando não há competição viável, como no credenciamento de médicos para o SUS. Todos os habilitados podem ser contratados.",
+    lei: "Lei 14.133/2021, art. 6º, XLIII e art. 79"
+  },
+  {
+    enunciado: "Quanto à distinção entre sobrepreço e superfaturamento, prevista no art. 6º da Lei 14.133/2021, é CORRETO afirmar:",
+    alts: ["Sobrepreço e superfaturamento são expressões sinônimas, ambas referindo-se ao dano efetivo ao erário.", "O superfaturamento refere-se ao preço unitário de insumos acima do mercado, independentemente do dano ao erário.", "O sobrepreço trata de preços de insumos acima dos valores de referência de mercado; o superfaturamento é o dano ao erário, podendo envolver preço, quantidade ou qualidade inferior ao contratado.", "O sobrepreço só se configura quando o custo global da obra supera o limite para inexigibilidade de licitação."],
+    gabarito: 2,
+    feedback: "Sobrepreço (art. 6º, LVI): preço unitário acima do mercado. Superfaturamento (art. 6º, LVII): dano efetivo ao erário — pode ocorrer por preço, quantidade ou qualidade inferiores ao contratado. Todo superfaturamento pressupõe distorção, mas a tipificação é distinta.",
+    lei: "Lei 14.133/2021, art. 6º, incisos LVI e LVII"
+  },
+  {
+    enunciado: "O diálogo competitivo, modalidade de licitação prevista na Lei 14.133/2021, aplica-se a:",
+    alts: ["Aquisição de bens e serviços comuns de qualquer valor, sendo obrigatório o critério de menor preço.", "Alienação de bens imóveis e móveis inservíveis da Administração Pública.", "Escolha de trabalho técnico, científico ou artístico, mediante concessão de prêmio ao vencedor.", "Contratações que envolvam inovação tecnológica ou técnica e impossibilidade de especificação prévia do objeto pela Administração."],
+    gabarito: 3,
+    feedback: "O diálogo competitivo é a principal novidade da Lei 14.133/2021. É usado quando a Administração não consegue definir previamente as especificações do objeto — ela dialoga com licitantes pré-selecionados antes de lançar o edital definitivo. Não existia na Lei 8.666/93.",
+    lei: "Lei 14.133/2021 — diálogo competitivo"
+  },
+  {
+    enunciado: "De acordo com a Lei 14.133/2021, nos contratos de serviços e fornecimentos contínuos, o prazo máximo de vigência, incluídas as prorrogações, é de:",
+    alts: ["5 anos, prorrogáveis por mais 12 meses em caráter excepcional.", "60 meses, podendo ser prorrogado por mais 12 meses.", "10 anos.", "7 anos, admitida prorrogação de até 1 ano."],
+    gabarito: 2,
+    feedback: "A Lei 14.133/2021 fixou o prazo máximo de 10 anos para contratos de serviços e fornecimentos contínuos. Questão idêntica caiu na prova 2023 Q25. Na lei revogada (8.666/93), o prazo era de 60+12 meses — não confundir.",
+    lei: "Lei 14.133/2021 — prazo dos contratos de serviços contínuos"
+  },
+  {
+    enunciado: "Quanto à distinção entre inexigibilidade e dispensa de licitação, é CORRETO afirmar:",
+    alts: ["Na inexigibilidade, o rol de hipóteses é taxativo; na dispensa, é exemplificativo.", "Na inexigibilidade, a competição é inviável; na dispensa, a competição é possível, mas a licitação seria inconveniente ou desnecessária.", "Tanto inexigibilidade quanto dispensa exigem rol taxativo de hipóteses previstas em lei.", "A dispensa de licitação ocorre exclusivamente em situações de emergência ou calamidade pública."],
+    gabarito: 1,
+    feedback: "Inexigibilidade (art. 74): competição impossível — rol exemplificativo. Dispensa (art. 75): competição possível, mas inconveniente — rol taxativo. Essa distinção é ponto fixo de prova.",
+    lei: "Lei 14.133/2021, arts. 74 e 75"
+  },
+  {
+    enunciado: "Sobre a dispensa de licitação em razão de situação emergencial, nos termos da Lei 14.133/2021, marque a alternativa CORRETA:",
+    alts: ["A contratação emergencial abrange qualquer bem ou serviço de interesse da Administração, sem restrição.", "A contratação direta por emergência é cabível mesmo quando a situação de urgência foi deliberadamente criada pelo próprio agente público.", "A contratação deve se limitar aos bens e serviços necessários ao atendimento da situação emergencial, sendo vedada quando a urgência for imputável ao agente público.", "O prazo máximo do contrato emergencial é de 180 dias, prorrogável por igual período."],
+    gabarito: 2,
+    feedback: "A dispensa emergencial tem três limites: (1) restringe-se aos bens e serviços necessários à situação; (2) é vedada quando a emergência foi 'fabricada' ou 'provocada' pelo agente; (3) prazo máximo de 1 ano, vedada prorrogação.",
+    lei: "Lei 14.133/2021, art. 75 — dispensa emergencial"
+  },
+  {
+    enunciado: "São mecanismos de manutenção do equilíbrio econômico-financeiro dos contratos administrativos, previstos na Lei 14.133/2021, EXCETO:",
+    alts: ["Reajuste, com periodicidade mínima de 12 meses.", "Revisão (reequilíbrio), para fatos imprevisíveis que alterem o equilíbrio contratual.", "Repactuação, específica para contratos de serviços com dedicação exclusiva de mão de obra.", "Atualização exorbitante das cláusulas econômicas do contrato."],
+    gabarito: 3,
+    feedback: "'Atualização exorbitante' não existe como mecanismo legal. Os três mecanismos válidos são: reajuste (fatos previsíveis, mínimo 12 meses), revisão/reequilíbrio (fatos imprevisíveis, qualquer momento) e repactuação (mão de obra, mínimo 12 meses). Questão idêntica caiu na prova 2021 Q30.",
+    lei: "Lei 14.133/2021 — equilíbrio econômico-financeiro"
+  },
+  {
+    enunciado: "Quanto à prorrogação dos contratos administrativos, de acordo com a Lei 14.133/2021, marque a alternativa INCORRETA:",
+    alts: ["A prorrogação somente é válida nos casos expressamente previstos em lei.", "Exige justificativa por escrito e autorização da autoridade competente.", "São admitidas prorrogações automáticas ou tácitas, desde que haja previsão contratual.", "A prorrogação deve preservar o equilíbrio econômico-financeiro do contrato."],
+    gabarito: 2,
+    feedback: "Prorrogações automáticas ou tácitas são vedadas. A prorrogação exige sempre: justificativa por escrito, autorização da autoridade competente, manutenção das cláusulas e preservação do equilíbrio econômico-financeiro. Ponto cobrado na prova 2022 Q24.",
+    lei: "Lei 14.133/2021 — prorrogação de contratos"
+  },
+  {
+    enunciado: "Segundo a Lei 14.133/2021, as sanções aplicáveis pela inexecução total ou parcial do contrato são:",
+    alts: ["Advertência, multa, impedimento de licitar e contratar por até 3 anos e declaração de inidoneidade.", "Advertência, multa, admoestação verbal e impedimento de licitar por até 2 anos.", "Multa, suspensão temporária por até 60 meses e declaração de inidoneidade.", "Advertência, multa, impedimento de licitar por até 5 anos e cassação do contrato."],
+    gabarito: 0,
+    feedback: "As sanções da Lei 14.133/2021 são: (1) advertência, (2) multa, (3) impedimento de licitar e contratar por até 3 anos e (4) declaração de inidoneidade (3 a 6 anos). 'Admoestação verbal' não existe — foi o distrator clássico cobrado na prova 2021 Q33.",
+    lei: "Lei 14.133/2021 — sanções contratuais"
+  },
+  {
+    enunciado: "Quanto às atribuições do gestor e do fiscal do contrato, nos termos do art. 117 da Lei 14.133/2021, é INCORRETO afirmar:",
+    alts: ["Cabe ao fiscal registrar todas as ocorrências relacionadas à execução do contrato.", "É vedada a designação de estagiário ou terceirizado para as funções de gestor ou fiscal.", "O gestor é responsável por coordenar as atividades dos fiscais e encaminhar processos de alteração contratual à autoridade superior.", "A contratação de terceiros para auxiliar o fiscal transfere a este as atribuições do fiscal, que fica isento de responsabilidade."],
+    gabarito: 3,
+    feedback: "A contratação de terceiros para auxiliar o fiscal NÃO transfere nem exime as atribuições do fiscal — ele permanece responsável pelas providências necessárias. A contratação de terceiros é facultativa e serve apenas para fornecer informações especializadas.",
+    lei: "Lei 14.133/2021, art. 117 — fiscalização de contratos"
+  },
+  {
+    enunciado: "O apostilamento, previsto no art. 136 da Lei 14.133/2021, é adequado para:",
+    alts: ["Alteração do prazo de vigência do contrato, por acordo entre as partes.", "Modificação do objeto contratual para acréscimo de serviços não previstos no edital.", "Registro de variações do valor contratual decorrentes de reajuste previsto no próprio contrato e atualização de dados cadastrais do contratado.", "Supressão de mais de 25% do valor inicial do contrato."],
+    gabarito: 2,
+    feedback: "O apostilamento é anotação simples no contrato para fatos que não alteram direitos e obrigações das partes: reajuste automático, atualização cadastral, alteração de dotação orçamentária e empenho de dotações suplementares. Para mudanças de objeto, prazo ou obrigações, exige-se termo aditivo.",
+    lei: "Lei 14.133/2021, art. 136 — apostilamento"
+  },
+  {
+    enunciado: "No contrato por escopo, conforme a tradição doutrinária consagrada na Lei 14.133/2021, o ajuste é considerado cumprido:",
+    alts: ["Com o advento do termo final, independentemente do cumprimento integral do objeto.", "Com o cumprimento do objeto contratado, independentemente do prazo avençado — embora o prazo importe para apurar eventual mora.", "Com a publicação do extrato contratual no Diário Oficial, que confere eficácia plena ao ajuste.", "Com a homologação da licitação, da qual o contrato por escopo é acessório."],
+    gabarito: 1,
+    feedback: "No contrato por escopo (ex.: obras), o cumprimento do objeto é que extingue o contrato. O prazo, porém, continua relevante — ultrapassado, o contratado continua obrigado a entregar, mas fica sujeito aos ônus do atraso. Tema cobrado nas provas 2021 Q31 e 2023 Q37.",
+    lei: "Lei 14.133/2021 — contratos por prazo certo e por escopo"
+  },
+  {
+    enunciado: "Segundo a Lei 14.133/2021, são instrumentos auxiliares das licitações e contratações, EXCETO:",
+    alts: ["Credenciamento e pré-qualificação.", "Sistema de Registro de Preços.", "Procedimento de Manifestação de Interesse.", "Registro inicial qualificado."],
+    gabarito: 3,
+    feedback: "'Registro inicial qualificado' não existe na Lei 14.133/2021. Os procedimentos auxiliares são: catálogo eletrônico de padronização, credenciamento, pré-qualificação, PMI e SRP. Questão baseada na prova 2023 Q24.",
+    lei: "Lei 14.133/2021, arts. 78, 79, 80, 81 e 82"
+  },
+  {
+    enunciado: "Em relação às fases de execução da despesa pública previstas na Lei 287/79 (Código de Finanças Públicas do Estado do RJ), a sequência correta é:",
+    alts: ["Liquidação → empenho → pagamento.", "Empenho → liquidação → pagamento.", "Pagamento → empenho → liquidação.", "Liquidação → pagamento → empenho."],
+    gabarito: 1,
+    feedback: "A sequência obrigatória é: (1) empenho — reserva a dotação orçamentária; (2) liquidação — verifica a entrega do bem/serviço e o direito do credor; (3) pagamento — extingue a obrigação. Não se pode pagar sem empenho prévio.",
+    lei: "Lei 287/79, arts. 83-94 — execução da despesa pública"
+  },
+  {
+    enunciado: "Quanto aos créditos adicionais previstos na Lei 287/79, marque a alternativa CORRETA:",
+    alts: ["Os créditos suplementares destinam-se a despesas para as quais não haja dotação específica na LOA, exigindo sempre lei específica.", "Os créditos extraordinários destinam-se a despesas urgentes e imprevisíveis, podendo ser abertos por decreto ou medida provisória, sem necessidade de indicação prévia de fonte de recursos.", "Os créditos especiais destinam-se a reforçar dotação orçamentária já existente, podendo ser abertos por decreto quando houver autorização na LOA.", "Todos os créditos adicionais exigem a indicação de fonte de recursos, sem exceção."],
+    gabarito: 1,
+    feedback: "Os créditos extraordinários (guerra, comoção interna, calamidade) podem ser abertos por decreto/MP sem indicação prévia de fonte — são a exceção exatamente por sua urgência. Os suplementares reforçam dotações existentes; os especiais cobrem despesas sem dotação. Todos os demais exigem fonte de recursos.",
+    lei: "Lei 287/79, arts. 83-94 — créditos adicionais"
+  },
+  {
+    enunciado: "O critério de julgamento das propostas denominado 'melhor regularidade técnica' está previsto na Lei 14.133/2021 como modalidade de avaliação das propostas apresentadas pelos licitantes?",
+    alts: ["Sim, é critério aplicável a contratações de serviços técnicos especializados.", "Sim, é aplicável exclusivamente na modalidade concurso.", "Não, esse critério não existe na Lei 14.133/2021.", "Sim, é critério residual aplicável quando os demais não forem suficientes."],
+    gabarito: 2,
+    feedback: "'Melhor regularidade técnica' não é critério de julgamento previsto na Lei 14.133/2021. Os critérios válidos são: menor preço, maior desconto, melhor técnica ou conteúdo artístico, técnica e preço, maior retorno econômico e maior lance. Esse foi o distrator clássico da prova 2021 Q40.",
+    lei: "Lei 14.133/2021 — critérios de julgamento das propostas"
+  }
+];
+
+let atual = 0;
+let selecionada = null;
+let confirmado = false;
+let acertos = 0;
+let respostas = [];
+
+function iniciar() {
+  document.getElementById('tela-inicio').style.display = 'none';
+  document.getElementById('tela-prova').style.display = 'block';
+  renderQ();
+}
+
+function renderQ() {
+  const q = Q[atual];
+  selecionada = null;
+  confirmado = false;
+
+  document.getElementById('q-num').textContent = `Questão ${atual + 1} de ${Q.length}`;
+  document.getElementById('prog-txt').textContent = `${atual + 1} / ${Q.length}`;
+  document.getElementById('barra').style.width = `${Math.round(((atual + 1) / Q.length) * 100)}%`;
+  document.getElementById('q-enunciado').textContent = q.enunciado;
+
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback';
+  fb.textContent = '';
+
+  const lei = document.getElementById('lei-ref');
+  lei.style.display = 'none';
+  lei.textContent = '';
+
+  const cont = document.getElementById('alternativas');
+  cont.innerHTML = '';
+  const letras = ['A', 'B', 'C', 'D'];
+  q.alts.forEach((txt, i) => {
+    const div = document.createElement('div');
+    div.className = 'alt';
+    div.innerHTML = `<div class="alt-letra">${letras[i]}</div><div class="alt-texto">${txt}</div>`;
+    div.onclick = () => selecionar(i);
+    cont.appendChild(div);
+  });
+
+  document.getElementById('btn-confirmar').disabled = true;
+  document.getElementById('btn-confirmar').style.display = 'block';
+  document.getElementById('btn-avancar').style.display = 'none';
+}
+
+function selecionar(i) {
+  if (confirmado) return;
+  selecionada = i;
+  const alts = document.querySelectorAll('.alt');
+  alts.forEach((el, idx) => {
+    el.className = idx === i ? 'alt selecionada' : 'alt';
+  });
+  document.getElementById('btn-confirmar').disabled = false;
+}
+
+function confirmar() {
+  if (selecionada === null || confirmado) return;
+  confirmado = true;
+  const q = Q[atual];
+  const correto = selecionada === q.gabarito;
+  if (correto) acertos++;
+  respostas.push({ correto, selecionada, gabarito: q.gabarito });
+
+  const alts = document.querySelectorAll('.alt');
+  alts.forEach((el, idx) => {
+    if (idx === q.gabarito) el.className = 'alt correta';
+    else if (idx === selecionada && !correto) el.className = 'alt errada';
+    else el.className = 'alt';
+  });
+
+  const fb = document.getElementById('feedback');
+  fb.className = correto ? 'feedback certo' : 'feedback errado';
+  fb.innerHTML = `<strong>${correto ? 'Correto!' : 'Incorreto.'}</strong> ${q.feedback}`;
+
+  const lei = document.getElementById('lei-ref');
+  lei.style.display = 'block';
+  lei.textContent = q.lei;
+
+  document.getElementById('btn-confirmar').style.display = 'none';
+  document.getElementById('btn-avancar').style.display = 'block';
+  document.getElementById('btn-avancar').textContent = atual < Q.length - 1 ? 'Próxima →' : 'Ver resultado';
+}
+
+function avancar() {
+  if (atual < Q.length - 1) {
+    atual++;
+    renderQ();
+    window.scrollTo(0, 0);
+  } else {
+    mostrarResultado();
+  }
+}
+
+function mostrarResultado() {
+  document.getElementById('tela-prova').style.display = 'none';
+  const tela = document.getElementById('tela-resultado');
+  tela.style.display = 'block';
+
+  const pct = Math.round((acertos / Q.length) * 100);
+  const erros = Q.length - acertos;
+  let cor, msg;
+  if (pct >= 90) { cor = '#3B6D11'; msg = 'Excelente! Domínio sólido do conteúdo.'; }
+  else if (pct >= 70) { cor = '#185FA5'; msg = 'Bom resultado. Revisar os erros antes de avançar.'; }
+  else if (pct >= 50) { cor = '#854F0B'; msg = 'Abaixo da meta. Reler o material e refazer.'; }
+  else { cor = '#A32D2D'; msg = 'Revisar todo o tópico antes de continuar.'; }
+
+  const letras = ['A','B','C','D'];
+  let gabHTML = '';
+  Q.forEach((q, i) => {
+    const r = respostas[i];
+    const icon = r.correto ? '<div class="gab-icon c">✓</div>' : '<div class="gab-icon e">✗</div>';
+    let respTxt = '';
+    if (!r.correto) {
+      respTxt = `<div class="gab-resp">Sua resposta: <span style="color:#A32D2D">${letras[r.selecionada]}</span> · Correta: <span style="color:#3B6D11">${letras[r.gabarito]}</span></div>`;
+    } else {
+      respTxt = `<div class="gab-resp" style="color:#3B6D11">Resposta: ${letras[r.gabarito]}</div>`;
+    }
+    gabHTML += `<div class="gab-item">
+      <div class="gab-header">${icon}<div class="gab-qnum">Questão ${i+1}</div></div>
+      <div class="gab-texto">${q.enunciado.substring(0, 90)}...</div>
+      ${respTxt}
+    </div>`;
+  });
+
+  tela.innerHTML = `
+    <div class="resultado-topo">
+      <div class="nota-circulo" style="border-color:${cor}">
+        <div class="nota-num" style="color:${cor}">${acertos}</div>
+        <div class="nota-den" style="color:${cor}">de ${Q.length}</div>
+      </div>
+      <h2 style="color:${cor}">${pct}% de aproveitamento</h2>
+      <p>${msg}</p>
+    </div>
+    <div class="stats-grid">
+      <div class="stat"><div class="stat-num" style="color:#3B6D11">${acertos}</div><div class="stat-label">Acertos</div></div>
+      <div class="stat"><div class="stat-num" style="color:#A32D2D">${erros}</div><div class="stat-label">Erros</div></div>
+      <div class="stat"><div class="stat-num" style="color:${cor}">${pct}%</div><div class="stat-label">Aproveitamento</div></div>
+    </div>
+    <div class="gabarito-titulo">Gabarito detalhado</div>
+    ${gabHTML}
+    <button class="btn-refazer" onclick="location.reload()">Refazer simulado</button>
+  `;
+  window.scrollTo(0, 0);
+}
+</script>
+</body>
+</html>
