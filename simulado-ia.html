@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulado IA — Licitações · QOE 2026</title>
+<style>
+:root{--azul:#185FA5;--azul-esc:#0C447C;--azul-cl:#E6F1FB;--verde:#3B6D11;--verde-cl:#EAF3DE;--amber:#854F0B;--amber-cl:#FAEEDA;--verm:#A32D2D;--verm-cl:#FCEBEB;--cinza:#5F5E5A;--cinza-cl:#F1EFE8;--borda:#D3D1C7;--bg:#f8f7f4;--texto:#1a1a18}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:var(--bg);color:var(--texto);font-size:15px;line-height:1.7;min-height:100vh}
+.header{background:var(--azul-esc);color:#fff;padding:1rem 1.25rem;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100}
+.back{color:#fff;text-decoration:none;font-size:20px;opacity:.8}
+.back:hover{opacity:1}
+.header-info{flex:1}
+.header-titulo{font-size:15px;font-weight:bold}
+.header-sub{font-size:11px;opacity:.7}
+.abs-badge{background:rgba(255,255,255,.15);border-radius:20px;padding:4px 10px;font-size:12px;font-weight:bold;white-space:nowrap}
+.conteudo{max-width:680px;margin:0 auto;padding:1.5rem 1rem 4rem}
+
+/* TELA CONFIG */
+#tela-config{}
+.config-card{background:#fff;border:1px solid var(--borda);border-radius:12px;padding:1.5rem;margin-bottom:1rem}
+.config-titulo{font-size:16px;font-weight:bold;margin-bottom:.35rem}
+.config-sub{font-size:13px;color:var(--cinza);margin-bottom:1rem;line-height:1.5}
+label{font-size:13px;font-weight:bold;color:var(--cinza);display:block;margin-bottom:.4rem}
+input[type=text],input[type=password],select{width:100%;padding:.65rem .85rem;border:1px solid var(--borda);border-radius:8px;font-size:14px;color:var(--texto);background:#fff;margin-bottom:1rem;-webkit-appearance:none}
+input:focus,select:focus{outline:none;border-color:var(--azul)}
+.aviso-chave{background:var(--amber-cl);border-left:3px solid #EF9F27;border-radius:0 8px 8px 0;padding:.65rem .9rem;font-size:12px;color:var(--amber);margin-bottom:1rem;line-height:1.5}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1rem}
+.chip{font-size:12px;padding:5px 12px;border:1px solid var(--borda);border-radius:20px;cursor:pointer;background:#fff;color:var(--cinza);transition:all .15s}
+.chip.ativo{background:var(--azul);color:#fff;border-color:var(--azul)}
+.modo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem}
+.modo-card{border:1.5px solid var(--borda);border-radius:8px;padding:.85rem;cursor:pointer;transition:all .15s;background:#fff}
+.modo-card.ativo{border-color:var(--azul);background:var(--azul-cl)}
+.modo-card-titulo{font-size:13px;font-weight:bold;margin-bottom:3px}
+.modo-card-desc{font-size:11px;color:var(--cinza);line-height:1.4}
+.btn-iniciar{width:100%;background:var(--azul);color:#fff;border:none;border-radius:8px;padding:.85rem;font-size:15px;font-weight:bold;cursor:pointer;margin-top:.5rem}
+.btn-iniciar:hover{background:var(--azul-esc)}
+.btn-iniciar:disabled{background:var(--borda);cursor:not-allowed;color:var(--cinza)}
+
+/* TELA PROVA */
+#tela-prova{display:none}
+.barra-wrap{height:4px;background:rgba(0,0,0,.08)}
+.barra-fill{height:4px;background:var(--verde);transition:width .4s}
+.q-wrap{padding:1.5rem 0}
+.q-num{font-size:11px;font-weight:bold;text-transform:uppercase;letter-spacing:.08em;color:var(--azul);margin-bottom:.4rem}
+.q-tema{font-size:11px;color:var(--cinza);margin-bottom:.75rem;background:var(--cinza-cl);display:inline-block;padding:2px 8px;border-radius:10px}
+.q-enunciado{font-size:15px;line-height:1.75;font-family:Georgia,serif;margin-bottom:1.25rem;color:var(--texto)}
+.alternativas{display:flex;flex-direction:column;gap:8px;margin-bottom:1rem}
+.alt{display:flex;align-items:flex-start;gap:10px;padding:.75rem 1rem;border:1.5px solid var(--borda);border-radius:8px;cursor:pointer;background:#fff;transition:all .15s}
+.alt:hover{border-color:var(--azul);background:var(--azul-cl)}
+.alt.sel{border-color:var(--azul);background:var(--azul-cl)}
+.alt.certa{border-color:var(--verde);background:var(--verde-cl)}
+.alt.errada{border-color:var(--verm);background:var(--verm-cl)}
+.alt-letra{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--borda);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:bold;flex-shrink:0;color:var(--cinza)}
+.alt.sel .alt-letra{border-color:var(--azul);color:var(--azul)}
+.alt.certa .alt-letra{border-color:var(--verde);color:var(--verde)}
+.alt.errada .alt-letra{border-color:var(--verm);color:var(--verm)}
+.alt-texto{font-size:14px;line-height:1.5;padding-top:2px}
+.feedback{border-radius:8px;padding:.85rem 1rem;margin-bottom:1rem;font-size:13px;line-height:1.6;display:none}
+.feedback.certo{background:var(--verde-cl);border-left:3px solid var(--verde);color:#27500A;display:block}
+.feedback.errado{background:var(--verm-cl);border-left:3px solid var(--verm);color:#791F1F;display:block}
+.lei-ref{font-size:12px;color:var(--cinza);background:var(--cinza-cl);border-radius:6px;padding:.4rem .75rem;margin-bottom:1rem;font-family:monospace;display:none}
+.loading{text-align:center;padding:2rem;color:var(--cinza);font-size:14px}
+.loading-dots::after{content:'.';animation:dots 1.2s steps(3,end) infinite}
+@keyframes dots{0%,20%{color:transparent;text-shadow:.4em 0 0 transparent,.8em 0 0 transparent}40%{color:var(--cinza);text-shadow:.4em 0 0 transparent,.8em 0 0 transparent}60%{text-shadow:.4em 0 0 var(--cinza),.8em 0 0 transparent}80%,100%{text-shadow:.4em 0 0 var(--cinza),.8em 0 0 var(--cinza)}}
+.btn-row{display:flex;gap:8px}
+.btn-conf{flex:1;background:var(--azul);color:#fff;border:none;border-radius:8px;padding:.7rem;font-size:14px;font-weight:bold;cursor:pointer}
+.btn-conf:disabled{background:var(--borda);cursor:not-allowed;color:var(--cinza)}
+.btn-av{flex:1;background:var(--azul-esc);color:#fff;border:none;border-radius:8px;padding:.7rem;font-size:14px;font-weight:bold;cursor:pointer;display:none}
+
+/* REFORÇO */
+.reforco-banner{background:var(--amber-cl);border-radius:8px;padding:.75rem 1rem;margin-bottom:1rem;font-size:13px;color:var(--amber);line-height:1.5;display:none}
+
+/* TELA RESULTADO */
+#tela-resultado{display:none;padding:2rem 1rem 4rem;max-width:680px;margin:0 auto}
+.res-topo{text-align:center;margin-bottom:1.5rem}
+.res-circulo{width:90px;height:90px;border-radius:50%;margin:0 auto 1rem;display:flex;flex-direction:column;align-items:center;justify-content:center;border:4px solid}
+.res-num{font-size:28px;font-weight:bold;line-height:1}
+.res-den{font-size:12px;opacity:.7}
+.abs-titulo{font-size:13px;font-weight:bold;text-transform:uppercase;letter-spacing:.06em;color:var(--cinza);margin:1.5rem 0 .75rem}
+.abs-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.abs-label{font-size:13px;flex:1}
+.abs-track{width:120px;height:10px;background:var(--cinza-cl);border-radius:5px;overflow:hidden}
+.abs-bar{height:10px;border-radius:5px}
+.abs-pct{font-size:12px;font-weight:bold;min-width:36px;text-align:right}
+.btn-refazer{width:100%;background:var(--azul);color:#fff;border:none;border-radius:8px;padding:.85rem;font-size:15px;font-weight:bold;cursor:pointer;margin-top:1.5rem}
+.btn-refazer:hover{background:var(--azul-esc)}
+.btn-reforco{width:100%;background:var(--amber);color:#fff;border:none;border-radius:8px;padding:.85rem;font-size:15px;font-weight:bold;cursor:pointer;margin-top:.75rem}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <a class="back" href="index.html">←</a>
+  <div class="header-info">
+    <div class="header-titulo">Simulado IA — Tópico 7</div>
+    <div class="header-sub">Questões geradas com base nas provas 2021-2023</div>
+  </div>
+  <div class="abs-badge" id="abs-global">Abs: 0%</div>
+</div>
+
+<!-- TELA CONFIG -->
+<div id="tela-config">
+<div class="conteudo">
+
+  <div class="config-card">
+    <div class="config-titulo">Chave da API Anthropic</div>
+    <div class="config-sub">A IA usa a API da Anthropic para gerar questões inéditas no estilo da banca PMERJ. Insira sua chave abaixo — ela fica salva só no seu navegador.</div>
+    <div class="aviso-chave"><strong>Privacidade:</strong> a chave é salva apenas no localStorage do seu navegador. Não sai do dispositivo para nenhum servidor além da Anthropic.</div>
+    <label>Chave da API (sk-ant-...)</label>
+    <input type="password" id="input-chave" placeholder="sk-ant-api03-..." oninput="validarForm()">
+  </div>
+
+  <div class="config-card">
+    <div class="config-titulo">Subtema</div>
+    <div class="config-sub">Escolha um subtema ou selecione "Aleatório" para misturar tudo.</div>
+    <div class="chips" id="chips-tema">
+      <div class="chip ativo" onclick="selTema(this,'aleatorio')">Aleatório</div>
+      <div class="chip" onclick="selTema(this,'principios')">7.1 Princípios</div>
+      <div class="chip" onclick="selTema(this,'conceitos')">7.2 Conceitos</div>
+      <div class="chip" onclick="selTema(this,'modalidades')">7.3 Modalidades</div>
+      <div class="chip" onclick="selTema(this,'fases')">7.4 Fases</div>
+      <div class="chip" onclick="selTema(this,'contratacao_direta')">7.5 Contratação direta</div>
+      <div class="chip" onclick="selTema(this,'procedimentos')">7.6 Proc. auxiliares</div>
+      <div class="chip" onclick="selTema(this,'contratos')">7.7 Contratos</div>
+      <div class="chip" onclick="selTema(this,'fiscalizacao')">7.8 Fiscalização</div>
+      <div class="chip" onclick="selTema(this,'apostilamento')">7.9 Apostilamento</div>
+      <div class="chip" onclick="selTema(this,'orcamento')">7.10 Orçamento</div>
+    </div>
+  </div>
+
+  <div class="config-card">
+    <div class="config-titulo">Modo de feedback</div>
+    <div class="modo-grid">
+      <div class="modo-card ativo" id="modo-imediato" onclick="selModo('imediato')">
+        <div class="modo-card-titulo">Imediato</div>
+        <div class="modo-card-desc">Feedback logo após marcar. Erros entram na fila de reforço.</div>
+      </div>
+      <div class="modo-card" id="modo-gabarito" onclick="selModo('gabarito')">
+        <div class="modo-card-titulo">Gabarito no final</div>
+        <div class="modo-card-desc">Responde tudo e vê o resultado ao final, como na prova real.</div>
+      </div>
+    </div>
+    <label>Número de questões por rodada</label>
+    <select id="sel-qtd">
+      <option value="5">5 questões</option>
+      <option value="10" selected>10 questões</option>
+      <option value="15">15 questões</option>
+      <option value="20">20 questões</option>
+    </select>
+  </div>
+
+  <button class="btn-iniciar" id="btn-iniciar" onclick="iniciar()" disabled>Gerar questões com IA →</button>
+
+</div>
+</div>
+
+<!-- TELA PROVA -->
+<div id="tela-prova">
+  <div class="barra-wrap"><div class="barra-fill" id="barra" style="width:0%"></div></div>
+  <div class="conteudo">
+    <div class="reforco-banner" id="reforco-banner">🔁 Rodada de reforço — questões baseadas nos seus erros anteriores</div>
+    <div id="q-area"></div>
+  </div>
+</div>
+
+<!-- TELA RESULTADO -->
+<div id="tela-resultado"></div>
+
+<script>
+const SYSTEM_PROMPT=`Você é um gerador especializado de questões de concurso público para o QOE (Quadro de Oficiais Especialistas) da PMERJ 2026, disciplina Direito Administrativo, Tópico 7 — Licitações e Contratos.
+
+LEGISLAÇÃO BASE DO EDITAL:
+- Lei 14.133/2021 (Nova Lei de Licitações): arts. 5º, 6º (incisos XX, XXIII, XXV, XLIII, XLV, LVI, LVII), 74, 75, 78, 79, 82, 117, 136
+- Lei Estadual 287/79: arts. 83-94 (fases de execução da despesa pública, créditos orçamentários e adicionais)
+
+PADRÃO DAS PROVAS ANTERIORES (2021, 2022, 2023):
+- Questões têm 4 alternativas (A, B, C, D)
+- Estilos usados: "marque a INCORRETA", "marque a CORRETA", "NÃO REPRESENTA", "EXCETO"
+- Distratores clássicos já usados pela banca:
+  * "julgamento subjetivo" no lugar de julgamento objetivo
+  * "admoestação verbal" como sanção (não existe)
+  * "atualização exorbitante" como mecanismo de equilíbrio (não existe)
+  * "melhor regularidade técnica" como critério de julgamento (não existe)
+  * "reserva orçamentária prévia obrigatória no SRP" (falso)
+  * "tomada de preços e convite" como modalidades da nova lei (foram extintas)
+  * "horizontalidade" como característica do contrato administrativo (correto é verticalidade)
+  * "prorrogação automática ou tácita" como permitida (vedada)
+  * prazo de impedimento "2 anos" quando na Lei 14.133 é "3 anos"
+  * prazo de serviços contínuos "60 meses" quando na Lei 14.133 é "10 anos"
+
+REGRAS DE GERAÇÃO:
+1. Gere exatamente o número de questões solicitado
+2. Cada questão deve ter: enunciado, 4 alternativas (A/B/C/D), índice da alternativa correta (0=A, 1=B, 2=C, 3=D), feedback explicativo, referência legal
+3. Varie os estilos de enunciado entre as questões
+4. Use os distratores clássicos da banca — mas não repita o mesmo distrator em questões consecutivas
+5. O feedback deve explicar POR QUE a alternativa correta está certa E por que as erradas estão erradas
+6. Responda APENAS com JSON válido, sem markdown, sem texto fora do JSON
+
+FORMATO DE RESPOSTA (JSON estrito):
+{
+  "questoes": [
+    {
+      "tema": "nome do subtema",
+      "enunciado": "texto da questão",
+      "alternativas": ["texto A", "texto B", "texto C", "texto D"],
+      "gabarito": 0,
+      "feedback": "explicação completa",
+      "lei": "referência legal"
+    }
+  ]
+}`;
+
+let apiKey='';
+let temaSel='aleatorio';
+let modoSel='imediato';
+let questoes=[];
+let atual=0;
+let selecionada=null;
+let confirmado=false;
+let acertos=0;
+let erros=[];
+let respostas=[];
+let modoReforco=false;
+let totalQtd=10;
+let absorcao={};
+
+function init(){
+  const k=localStorage.getItem('qoe_apikey')||'';
+  if(k){document.getElementById('input-chave').value=k;validarForm();}
+  const abs=JSON.parse(localStorage.getItem('qoe_abs')||'{}');
+  absorcao=abs;
+  atualizarAbsGlobal();
+}
+
+function validarForm(){
+  const k=document.getElementById('input-chave').value.trim();
+  document.getElementById('btn-iniciar').disabled=!k;
+}
+
+function selTema(el,v){
+  document.querySelectorAll('#chips-tema .chip').forEach(c=>c.className='chip');
+  el.className='chip ativo';
+  temaSel=v;
+}
+
+function selModo(m){
+  modoSel=m;
+  document.getElementById('modo-imediato').className='modo-card'+(m==='imediato'?' ativo':'');
+  document.getElementById('modo-gabarito').className='modo-card'+(m==='gabarito'?' ativo':'');
+}
+
+function atualizarAbsGlobal(){
+  const vals=Object.values(absorcao);
+  const media=vals.length?Math.round(vals.reduce((a,b)=>a+b,0)/vals.length):0;
+  document.getElementById('abs-global').textContent='Abs: '+media+'%';
+}
+
+async function iniciar(reforco=false){
+  apiKey=document.getElementById('input-chave').value.trim();
+  localStorage.setItem('qoe_apikey',apiKey);
+  totalQtd=parseInt(document.getElementById('sel-qtd').value);
+  modoReforco=reforco;
+
+  document.getElementById('tela-config').style.display='none';
+  document.getElementById('tela-resultado').style.display='none';
+  document.getElementById('tela-prova').style.display='block';
+
+  if(reforco){
+    document.getElementById('reforco-banner').style.display='block';
+  }
+
+  const area=document.getElementById('q-area');
+  area.innerHTML='<div class="loading"><div class="loading-dots">Gerando questões com IA</div><br><small style="color:var(--cinza);font-size:12px;margin-top:.5rem;display:block">Isso pode levar até 20 segundos</small></div>';
+
+  const temaPrompt=reforco?
+    'Foco nos subtemas onde o aluno errou: '+erros.map(e=>e.tema).filter((v,i,a)=>a.indexOf(v)===i).join(', '):
+    (temaSel==='aleatorio'?'Distribua as questões entre todos os subtemas do Tópico 7':
+    'Subtema específico: '+temaSel);
+
+  const userMsg=`Gere ${totalQtd} questões de múltipla escolha sobre Licitações e Contratos (Tópico 7 — QOE PMERJ 2026). ${temaPrompt}. Siga rigorosamente o formato JSON especificado.`;
+
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:4000,
+        system:SYSTEM_PROMPT,
+        messages:[{role:'user',content:userMsg}]
+      })
+    });
+
+    if(!resp.ok){
+      const err=await resp.json();
+      throw new Error(err.error?.message||'Erro na API');
+    }
+
+    const data=await resp.json();
+    const texto=data.content[0].text.replace(/```json|```/g,'').trim();
+    const parsed=JSON.parse(texto);
+    questoes=parsed.questoes;
+    atual=0;selecionada=null;confirmado=false;acertos=0;respostas=[];
+    if(!reforco)erros=[];
+    renderQ();
+  }catch(e){
+    area.innerHTML=`<div style="background:var(--verm-cl);border-left:3px solid var(--verm);border-radius:0 8px 8px 0;padding:1rem;font-size:13px;color:var(--verm);line-height:1.6">
+      <strong>Erro ao gerar questões</strong><br>${e.message}<br><br>
+      Verifique se a chave da API está correta e tente novamente.
+      <br><br><button onclick="voltar()" style="background:var(--verm);color:#fff;border:none;border-radius:6px;padding:.5rem 1rem;cursor:pointer;font-size:13px">← Voltar</button>
+    </div>`;
+  }
+}
+
+function renderQ(){
+  if(atual>=questoes.length){mostrarResultado();return;}
+  const q=questoes[atual];
+  selecionada=null;confirmado=false;
+  document.getElementById('barra').style.width=Math.round((atual/questoes.length)*100)+'%';
+
+  const letras=['A','B','C','D'];
+  let altsHTML=q.alternativas.map((txt,i)=>`
+    <div class="alt" id="alt${i}" onclick="selAlt(${i})">
+      <div class="alt-letra">${letras[i]}</div>
+      <div class="alt-texto">${txt}</div>
+    </div>`).join('');
+
+  document.getElementById('q-area').innerHTML=`
+    <div class="q-wrap">
+      <div class="q-num">Questão ${atual+1} de ${questoes.length}</div>
+      <div class="q-tema">${q.tema||'Licitações — QOE 2026'}</div>
+      <div class="q-enunciado">${q.enunciado}</div>
+      <div class="alternativas">${altsHTML}</div>
+      <div class="feedback" id="feedback"></div>
+      <div class="lei-ref" id="lei-ref">${q.lei||''}</div>
+      <div class="btn-row">
+        <button class="btn-conf" id="btn-conf" onclick="confirmar()" disabled>Confirmar resposta</button>
+        <button class="btn-av" id="btn-av" onclick="avancar()">${atual<questoes.length-1?'Próxima →':'Ver resultado'}</button>
+      </div>
+    </div>`;
+}
+
+function selAlt(i){
+  if(confirmado)return;
+  selecionada=i;
+  document.querySelectorAll('.alt').forEach((el,idx)=>el.className='alt'+(idx===i?' sel':''));
+  document.getElementById('btn-conf').disabled=false;
+}
+
+function confirmar(){
+  if(selecionada===null||confirmado)return;
+  confirmado=true;
+  const q=questoes[atual];
+  const correto=selecionada===q.gabarito;
+  if(correto)acertos++;
+  else erros.push({...q,respostaDada:selecionada});
+  respostas.push({correto,selecionada,gabarito:q.gabarito,tema:q.tema});
+
+  // Atualiza absorção por tema
+  const t=q.tema||'geral';
+  if(!absorcao[t])absorcao[t]=0;
+  const total_tema=respostas.filter(r=>r.tema===t).length;
+  const acertos_tema=respostas.filter(r=>r.tema===t&&r.correto).length;
+  absorcao[t]=Math.round((acertos_tema/total_tema)*100);
+  localStorage.setItem('qoe_abs',JSON.stringify(absorcao));
+  atualizarAbsGlobal();
+
+  document.querySelectorAll('.alt').forEach((el,idx)=>{
+    if(idx===q.gabarito)el.className='alt certa';
+    else if(idx===selecionada&&!correto)el.className='alt errada';
+    else el.className='alt';
+  });
+
+  if(modoSel==='imediato'){
+    const fb=document.getElementById('feedback');
+    fb.className='feedback '+(correto?'certo':'errado');
+    fb.innerHTML='<strong>'+(correto?'Correto!':'Incorreto.')+'</strong> '+q.feedback;
+    const lei=document.getElementById('lei-ref');
+    if(q.lei){lei.style.display='block';}
+  }
+
+  document.getElementById('btn-conf').style.display='none';
+  document.getElementById('btn-av').style.display='block';
+}
+
+function avancar(){
+  atual++;
+  if(atual<questoes.length)renderQ();
+  else mostrarResultado();
+  window.scrollTo(0,0);
+}
+
+function mostrarResultado(){
+  document.getElementById('tela-prova').style.display='none';
+  const tela=document.getElementById('tela-resultado');
+  tela.style.display='block';
+
+  const pct=Math.round((acertos/questoes.length)*100);
+  const cor=pct>=80?'#3B6D11':pct>=60?'#185FA5':pct>=40?'#854F0B':'#A32D2D';
+  const msg=pct>=80?'Ótimo desempenho!':pct>=60?'Bom resultado — revisar os erros.':pct>=40?'Abaixo da meta — reforço recomendado.':'Revisar o material antes de continuar.';
+
+  const temErr=erros.length>0;
+  const absRows=Object.entries(absorcao).map(([t,v])=>{
+    const c=v>=80?'#3B6D11':v>=50?'#854F0B':'#A32D2D';
+    const bg=v>=80?'#EAF3DE':v>=50?'#FAEEDA':'#FCEBEB';
+    return`<div class="abs-row"><div class="abs-label" style="font-size:12px">${t}</div><div class="abs-track"><div class="abs-bar" style="width:${v}%;background:${c}"></div></div><div class="abs-pct" style="color:${c}">${v}%</div></div>`;
+  }).join('');
+
+  // gabarito final (modo gabarito)
+  let gabHTML='';
+  if(modoSel==='gabarito'){
+    const letras=['A','B','C','D'];
+    gabHTML=`<div class="abs-titulo">Gabarito comentado</div>`;
+    questoes.forEach((q,i)=>{
+      const r=respostas[i];
+      if(!r)return;
+      const ok=r.correto;
+      gabHTML+=`<div style="background:#fff;border:1px solid var(--borda);border-radius:8px;padding:.85rem;margin-bottom:8px">
+        <div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:.4rem">
+          <div style="width:20px;height:20px;border-radius:50%;background:${ok?'var(--verde-cl)':'var(--verm-cl)'};color:${ok?'var(--verde)':'var(--verm)'};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:bold;flex-shrink:0">${ok?'✓':'✗'}</div>
+          <div style="font-size:13px;font-weight:bold">Q${i+1} — ${q.tema||''}</div>
+        </div>
+        <div style="font-size:12px;color:var(--cinza);margin-bottom:.5rem">${q.enunciado.substring(0,100)}...</div>
+        ${!ok?`<div style="font-size:12px;margin-bottom:.4rem">Sua resposta: <span style="color:var(--verm);font-weight:bold">${letras[r.selecionada]}</span> · Correta: <span style="color:var(--verde);font-weight:bold">${letras[r.gabarito]}</span></div>`:`<div style="font-size:12px;color:var(--verde)">Resposta: ${letras[r.gabarito]}</div>`}
+        <div style="font-size:12px;color:#444;background:var(--cinza-cl);border-radius:6px;padding:.5rem .75rem;margin-top:.4rem">${q.feedback}</div>
+      </div>`;
+    });
+  }
+
+  tela.innerHTML=`<div style="max-width:680px;margin:0 auto;padding:1.5rem 1rem 4rem">
+    <div class="res-topo">
+      <div class="res-circulo" style="border-color:${cor}">
+        <div class="res-num" style="color:${cor}">${acertos}</div>
+        <div class="res-den" style="color:${cor}">de ${questoes.length}</div>
+      </div>
+      <div style="font-size:20px;font-weight:bold;color:${cor}">${pct}%</div>
+      <div style="font-size:13px;color:var(--cinza);margin-top:.3rem">${msg}</div>
+    </div>
+    ${absRows?`<div class="abs-titulo">Absorção por subtema</div>${absRows}`:''}
+    ${gabHTML}
+    ${temErr?`<button class="btn-reforco" onclick="refazer(true)">🔁 Refazer com os ${erros.length} erro(s)</button>`:''}
+    <button class="btn-refazer" onclick="refazer(false)">Nova rodada com IA →</button>
+    <button onclick="voltar()" style="width:100%;background:transparent;border:1px solid var(--borda);border-radius:8px;padding:.75rem;font-size:14px;cursor:pointer;margin-top:.75rem;color:var(--cinza)">← Voltar ao menu</button>
+  </div>`;
+  window.scrollTo(0,0);
+}
+
+function refazer(reforco){
+  document.getElementById('tela-resultado').style.display='none';
+  if(reforco){
+    // Reforço: re-gera questões baseadas nos erros
+    document.getElementById('tela-config').style.display='none';
+    iniciar(true);
+  } else {
+    document.getElementById('tela-config').style.display='block';
+    erros=[];
+  }
+}
+
+function voltar(){
+  document.getElementById('tela-prova').style.display='none';
+  document.getElementById('tela-resultado').style.display='none';
+  document.getElementById('tela-config').style.display='block';
+  erros=[];questoes=[];atual=0;acertos=0;respostas=[];
+}
+
+init();
+</script>
+</body>
+</html>

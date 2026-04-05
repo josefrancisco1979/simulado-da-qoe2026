@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Material — Licitações · QOE 2026</title>
+<style>
+:root{--azul:#185FA5;--azul-esc:#0C447C;--azul-cl:#E6F1FB;--verde:#3B6D11;--verde-cl:#EAF3DE;--amber:#854F0B;--amber-cl:#FAEEDA;--verm:#A32D2D;--verm-cl:#FCEBEB;--roxo:#534AB7;--roxo-cl:#EEEDFE;--cinza:#5F5E5A;--cinza-cl:#F1EFE8;--borda:#D3D1C7;--bg:#f8f7f4;--texto:#1a1a18}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:var(--bg);color:var(--texto);font-size:15px;line-height:1.7;padding-bottom:4rem}
+.header{background:var(--azul-esc);color:#fff;padding:1rem 1.25rem;position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px}
+.back{color:#fff;text-decoration:none;font-size:20px;opacity:.8}
+.back:hover{opacity:1}
+.header-info{flex:1}
+.header-titulo{font-size:15px;font-weight:bold}
+.header-sub{font-size:11px;opacity:.7}
+.nav-tabs{background:var(--azul-esc);padding:0 1rem;display:flex;gap:4px;overflow-x:auto;border-top:1px solid rgba(255,255,255,.1)}
+.nav-tab{font-size:11px;padding:.55rem .75rem;color:rgba(255,255,255,.6);cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;transition:all .15s}
+.nav-tab.ativo{color:#fff;border-bottom-color:#7FC8F8}
+.nav-tab:hover{color:#fff}
+.conteudo{max-width:720px;margin:0 auto;padding:1.5rem 1rem}
+.secao{display:none}
+.secao.ativa{display:block}
+.secao-titulo{font-size:20px;font-weight:bold;color:var(--azul-esc);margin-bottom:.35rem}
+.secao-ref{font-size:12px;color:var(--cinza);margin-bottom:1.25rem;font-family:monospace}
+h3{font-size:15px;font-weight:bold;color:var(--texto);margin:1.5rem 0 .5rem}
+p{margin-bottom:.85rem;line-height:1.7}
+ul,ol{padding-left:1.4rem;margin-bottom:.85rem}
+li{margin-bottom:.3rem;line-height:1.6}
+.lei{background:#fff;border:1px solid var(--borda);border-left:4px solid var(--azul);border-radius:0 8px 8px 0;padding:.85rem 1rem;margin:1rem 0;font-size:13px;line-height:1.7;color:var(--texto)}
+.lei-titulo{font-size:10px;font-weight:bold;text-transform:uppercase;letter-spacing:.08em;color:var(--azul);margin-bottom:.4rem}
+.explicacao{background:var(--azul-cl);border-radius:8px;padding:.85rem 1rem;margin:1rem 0;font-size:13px;line-height:1.6;color:var(--azul-esc)}
+.explicacao-titulo{font-size:10px;font-weight:bold;text-transform:uppercase;letter-spacing:.08em;color:var(--azul);margin-bottom:.4rem}
+.macete{background:var(--amber-cl);border-left:3px solid #EF9F27;border-radius:0 8px 8px 0;padding:.75rem 1rem;margin:1rem 0;font-size:13px;line-height:1.6;color:var(--amber)}
+.macete-titulo{font-size:10px;font-weight:bold;text-transform:uppercase;letter-spacing:.08em;color:#633806;margin-bottom:.35rem}
+.bizu{background:var(--verde-cl);border-left:3px solid var(--verde);border-radius:0 8px 8px 0;padding:.75rem 1rem;margin:1rem 0;font-size:13px;line-height:1.6;color:var(--verde)}
+.bizu-titulo{font-size:10px;font-weight:bold;text-transform:uppercase;letter-spacing:.08em;color:#27500A;margin-bottom:.35rem}
+.atencao{background:var(--verm-cl);border-left:3px solid var(--verm);border-radius:0 8px 8px 0;padding:.75rem 1rem;margin:1rem 0;font-size:13px;line-height:1.6;color:var(--verm)}
+.atencao-titulo{font-size:10px;font-weight:bold;text-transform:uppercase;letter-spacing:.08em;color:#791F1F;margin-bottom:.35rem}
+.prova{background:var(--roxo-cl);border-left:3px solid var(--roxo);border-radius:0 8px 8px 0;padding:.6rem 1rem;margin:.75rem 0;font-size:12px;line-height:1.5;color:var(--roxo)}
+table{width:100%;border-collapse:collapse;font-size:13px;margin:1rem 0}
+th{background:var(--azul-esc);color:#fff;padding:.55rem .85rem;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.04em}
+td{padding:.5rem .85rem;border-bottom:1px solid var(--borda);vertical-align:top;line-height:1.5}
+tr:nth-child(even) td{background:var(--cinza-cl)}
+.divider{border:none;border-top:1px solid var(--borda);margin:1.75rem 0}
+.progresso-btn{position:fixed;bottom:1.5rem;right:1rem;background:var(--verde);color:#fff;border:none;border-radius:24px;padding:.65rem 1.25rem;font-size:13px;font-weight:bold;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.progresso-btn:hover{background:#27500A}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <a class="back" href="index.html">←</a>
+  <div class="header-info">
+    <div class="header-titulo">Material de Estudo — Tópico 7</div>
+    <div class="header-sub">Lei 14.133/2021 · Lei 287/79</div>
+  </div>
+</div>
+
+<div class="nav-tabs" id="nav-tabs">
+  <div class="nav-tab ativo" onclick="ir(0)">7.1 Princípios</div>
+  <div class="nav-tab" onclick="ir(1)">7.2 Conceitos</div>
+  <div class="nav-tab" onclick="ir(2)">7.3 Modalidades</div>
+  <div class="nav-tab" onclick="ir(3)">7.4 Fases</div>
+  <div class="nav-tab" onclick="ir(4)">7.5 Contratação direta</div>
+  <div class="nav-tab" onclick="ir(5)">7.6 Proc. Auxiliares</div>
+  <div class="nav-tab" onclick="ir(6)">7.7 Contratos</div>
+  <div class="nav-tab" onclick="ir(7)">7.8 Fiscalização</div>
+  <div class="nav-tab" onclick="ir(8)">7.9 Apostilamento</div>
+  <div class="nav-tab" onclick="ir(9)">7.10 Orçamento</div>
+</div>
+
+<div class="conteudo">
+
+<!-- 7.1 PRINCÍPIOS -->
+<div class="secao ativa" id="s0">
+  <div class="secao-titulo">7.1 — Princípios das licitações</div>
+  <div class="secao-ref">Lei 14.133/2021, art. 5º</div>
+
+  <div class="lei">
+    <div class="lei-titulo">Lei seca — art. 5º</div>
+    As licitações e contratações regidas por esta Lei devem observar os princípios da <strong>legalidade, impessoalidade, moralidade, publicidade, eficiência, interesse público, probidade administrativa, igualdade, planejamento, transparência, eficácia, segregação das funções, motivação, vinculação ao instrumento convocatório, julgamento objetivo, segurança jurídica, razoabilidade, competitividade, proporcionalidade, celeridade, economicidade</strong> e <strong>desenvolvimento nacional sustentável</strong>.
+  </div>
+
+  <div class="explicacao">
+    <div class="explicacao-titulo">Explicação</div>
+    O art. 5º lista 22 princípios que regem toda licitação pública. A banca não cobra todos — foca nos que têm definição própria ou que já apareceram nas provas. Os mais cobrados são: segregação das funções, competitividade, planejamento, julgamento objetivo e vinculação ao edital.
+  </div>
+
+  <h3>Princípios que a banca cobra com definição</h3>
+
+  <p><strong>Segregação das funções:</strong> distribuição e especialização de funções entre os agentes públicos que atuam nas licitações, para garantir maior especialização e reduzir conflitos de interesse. Um agente não pode acumular funções de elaborar o edital, julgar as propostas e fiscalizar o contrato.</p>
+  <div class="prova">Prova 2023 Q15: cobrou a definição desse princípio — gabarito B.</div>
+
+  <p><strong>Competitividade:</strong> veda admitir, prever, incluir ou tolerar, nos atos de convocação, cláusulas ou condições que comprometam, restrinjam ou frustrem o caráter competitivo da licitação.</p>
+  <div class="prova">Prova 2023 Q17: cobrou esse princípio pela sua definição — gabarito A.</div>
+
+  <p><strong>Julgamento objetivo:</strong> as propostas devem ser avaliadas com base em critérios previamente fixados no edital, sem subjetividade. O oposto — julgamento subjetivo — não existe como critério válido.</p>
+  <div class="prova">Prova 2021 Q32: "julgamento subjetivo" foi o distrator — a lei prevê julgamento objetivo.</div>
+
+  <p><strong>Planejamento:</strong> toda contratação deve ser precedida de estudos e documentos técnicos que demonstrem sua necessidade e viabilidade.</p>
+  <div class="prova">Prova 2023 Q16: cobrou qual documento inicia o planejamento — gabarito A (ETP).</div>
+
+  <p><strong>Vinculação ao instrumento convocatório:</strong> a Administração e os licitantes estão vinculados às regras fixadas no edital. O edital é a "lei da licitação".</p>
+
+  <div class="macete">
+    <div class="macete-titulo">Macete — Os 5 mais cobrados</div>
+    <strong>SE COM PJ</strong> — <strong>Se</strong>gregação das funções, <strong>Com</strong>petitividade, <strong>P</strong>lanejamento, <strong>J</strong>ulgamento objetivo, (vinculação ao edital como bônus)
+  </div>
+
+  <div class="atencao">
+    <div class="atencao-titulo">Não confundir</div>
+    <strong>Desenvolvimento nacional sustentável</strong> é um dos princípios do art. 5º — foi objetivo expresso na Lei 8.666/93 (art. 3º). A banca já cobrou: não é objetivo, é princípio na nova lei.
+  </div>
+
+  <div class="bizu">
+    <div class="bizu-titulo">Bizu de prova</div>
+    Se a questão listar "julgamento subjetivo" como princípio da licitação — é o distrator. O correto é sempre <strong>julgamento objetivo</strong>. Se listar "preservar o erário de atos de corrupção" como objetivo — também é distrator. Não está na lei.
+  </div>
+</div>
+
+<!-- 7.2 CONCEITOS -->
+<div class="secao" id="s1">
+  <div class="secao-titulo">7.2 — Conceitos fundamentais</div>
+  <div class="secao-ref">Lei 14.133/2021, art. 6º, incisos XX, XXIII, XXV, XLIII, XLV, LVI, LVII</div>
+
+  <div class="lei">
+    <div class="lei-titulo">Lei seca — art. 6º (incisos cobrados no edital)</div>
+    <strong>XX — Estudo Técnico Preliminar (ETP):</strong> documento constitutivo da primeira etapa do planejamento de uma contratação, que caracteriza o interesse público envolvido e a sua melhor solução.<br><br>
+    <strong>XXIII — Termo de Referência (TR):</strong> documento necessário para a contratação de bens e serviços, que deve conter os elementos do art. 6º, XXIII, a-p.<br><br>
+    <strong>XXV — Projeto Básico (PB):</strong> conjunto de elementos necessários e suficientes, com nível de precisão adequado, para caracterizar a obra ou serviço de engenharia.<br><br>
+    <strong>XLIII — Credenciamento:</strong> processo administrativo de chamamento público em que a Administração convoca interessados para que demonstrem preencher os requisitos para a realização de objeto de interesse público e, assim, firmem pré-acordo.<br><br>
+    <strong>XLV — Sistema de Registro de Preços (SRP):</strong> conjunto de procedimentos para realização de contratações de bens e serviços, com a disponibilização de ata de registro de preços para utilização pela Administração Pública.<br><br>
+    <strong>LVI — Sobrepreço:</strong> preços orçados para a licitação ou contratados em valor superior ao preço de referência de mercado obtido pela Administração.<br><br>
+    <strong>LVII — Superfaturamento:</strong> dano ao erário caracterizado pela medição de quantidades superiores às executadas, pelo pagamento de preço unitário superior ao contratado, ou pela não incorporação no preço de insumos e variações de custo.
+  </div>
+
+  <h3>ETP → TR ou PB → Edital — a ordem do planejamento</h3>
+  <div class="explicacao">
+    <div class="explicacao-titulo">Explicação</div>
+    O ETP é sempre o ponto de partida. Após o ETP, elabora-se: o TR (para serviços e compras em geral) OU o PB (para obras e serviços de engenharia). Só então é elaborado o edital. Nunca ao contrário.
+  </div>
+
+  <div class="macete">
+    <div class="macete-titulo">Macete — Ordem do planejamento</div>
+    <strong>ETP → TR/PB → EDITAL</strong><br>
+    Pense assim: primeiro você estuda o problema (ETP), depois define o que comprar (TR ou PB), depois convoca o mercado (Edital).
+  </div>
+
+  <div class="prova">Prova 2023 Q16: "Qual documento é a primeira etapa do planejamento?" — gabarito A (ETP). As alternativas B, C e D colocavam TR, PB e Edital como primeira etapa — todos errados.</div>
+
+  <h3>SRP — Sistema de Registro de Preços</h3>
+  <div class="lei">
+    <div class="lei-titulo">Características essenciais do SRP</div>
+    · Não é modalidade de licitação — é um sistema/procedimento auxiliar<br>
+    · <strong>Não exige reserva orçamentária prévia</strong> para o registro<br>
+    · A Administração <strong>não está obrigada a contratar</strong> — é discricionário<br>
+    · Prazo de validade da ata: até 1 ano, prorrogável por igual período<br>
+    · Realizado via concorrência ou pregão
+  </div>
+  <div class="atencao">
+    <div class="atencao-titulo">Distrator clássico</div>
+    "No SRP há necessidade de reserva orçamentária para efetivação do registro" — FALSO. A reserva só é necessária no momento da contratação efetiva, não do registro. Prova 2021 Q26 cobrou exatamente isso.
+  </div>
+
+  <h3>Sobrepreço x Superfaturamento</h3>
+  <table>
+    <tr><th>Aspecto</th><th>Sobrepreço</th><th>Superfaturamento</th></tr>
+    <tr><td>O que é</td><td>Preço unitário acima do mercado</td><td>Dano efetivo ao erário</td></tr>
+    <tr><td>Como ocorre</td><td>Insumo ou serviço com preço acima da referência de mercado</td><td>Preço, quantidade ou qualidade inferior ao contratado</td></tr>
+    <tr><td>Relação</td><td>Pode existir sem causar dano global</td><td>Pressupõe distorção de preço, quantidade ou qualidade</td></tr>
+  </table>
+  <div class="bizu">
+    <div class="bizu-titulo">Bizu</div>
+    <strong>Sobre</strong>preço = preço unitário <strong>sobre</strong> o mercado (acima).<br>
+    <strong>Super</strong>faturamento = dano <strong>super</strong>ior ao que deveria ser pago (erário lesado de fato).
+  </div>
+</div>
+
+<!-- 7.3 MODALIDADES -->
+<div class="secao" id="s2">
+  <div class="secao-titulo">7.3 — Modalidades de licitação</div>
+  <div class="secao-ref">Lei 14.133/2021</div>
+
+  <div class="lei">
+    <div class="lei-titulo">Lei seca — 5 modalidades da Lei 14.133/2021</div>
+    Art. [...] São modalidades de licitação:<br>
+    I — <strong>concorrência</strong>;<br>
+    II — <strong>concurso</strong>;<br>
+    III — <strong>leilão</strong>;<br>
+    IV — <strong>pregão</strong>;<br>
+    V — <strong>diálogo competitivo</strong>.
+  </div>
+
+  <div class="atencao">
+    <div class="atencao-titulo">Extintas na nova lei</div>
+    <strong>Tomada de preços</strong> e <strong>convite</strong> foram extintas. Se aparecerem como opção na prova — são distratores. Prova 2023 Q23 já cobrou as 5 modalidades corretas — gabarito C.
+  </div>
+
+  <table>
+    <tr><th>Modalidade</th><th>Objeto</th><th>Critério típico</th></tr>
+    <tr><td><strong>Concorrência</strong></td><td>Obras, serviços especializados, bens acima dos limites do pregão</td><td>Menor preço, técnica e preço</td></tr>
+    <tr><td><strong>Concurso</strong></td><td>Trabalho técnico, científico ou artístico</td><td>Melhor técnica; prêmio ao vencedor</td></tr>
+    <tr><td><strong>Leilão</strong></td><td>Alienação de bens imóveis e móveis inservíveis</td><td>Maior lance</td></tr>
+    <tr><td><strong>Pregão</strong></td><td>Bens e serviços comuns — qualquer valor</td><td>Menor preço ou maior desconto</td></tr>
+    <tr><td><strong>Diálogo competitivo</strong></td><td>Inovação tecnológica; objeto impossível de especificar previamente</td><td>Varia — definido após diálogo</td></tr>
+  </table>
+
+  <h3>Diálogo competitivo — novidade da Lei 14.133/2021</h3>
+  <div class="explicacao">
+    <div class="explicacao-titulo">Explicação</div>
+    Não existia na Lei 8.666/93. É usado quando a Administração não consegue definir previamente as especificações do objeto — por exemplo, na contratação de solução tecnológica inovadora. Ela abre um diálogo com licitantes pré-selecionados, desenvolve soluções junto com eles, e depois lança o edital definitivo.
+  </div>
+  <div class="bizu">
+    <div class="bizu-titulo">Bizu</div>
+    Diálogo competitivo = a Administração "conversa" com o mercado antes de definir o objeto. Único caso em que o edital vem depois do diálogo. Alta chance de cair pela primeira vez em 2026.
+  </div>
+
+  <h3>Pregão — detalhamento</h3>
+  <p>É a modalidade mais usada. Considera-se bem ou serviço comum aquele cujos padrões de desempenho e qualidade possam ser objetivamente definidos pelo edital.</p>
+  <p><strong>Ordem da fase externa do pregão:</strong> publicação do edital → propostas → lances → negociação → habilitação → adjudicação → homologação.</p>
+  <div class="atencao">
+    <div class="atencao-titulo">Distrator clássico — pregão</div>
+    "A definição do objeto deve ser suficientemente complexa, permitidas especificações excessivas" — FALSO. O correto é: definição suficientemente <strong>clara</strong>, vedadas especificações <strong>excessivas</strong> que restrinjam a competição. Prova 2021 Q37.
+  </div>
+  <div class="macete">
+    <div class="macete-titulo">Macete — Prazo de validade das propostas no pregão</div>
+    Se o edital não fixar prazo: <strong>60 dias</strong>. Prova 2022 Q37 cobrou exatamente isso.
+  </div>
+</div>
+
+<!-- 7.4 FASES -->
+<div class="secao" id="s3">
+  <div class="secao-titulo">7.4 — Fases da licitação e critérios de julgamento</div>
+  <div class="secao-ref">Lei 14.133/2021</div>
+
+  <h3>Fase interna (preparatória)</h3>
+  <div class="explicacao">
+    <div class="explicacao-titulo">Explicação</div>
+    Todos os atos praticados antes da publicação do edital: ETP, TR ou PB, estimativa de preços, verificação orçamentária, elaboração do edital, aprovação jurídica. Fase interna = dentro da Administração, sem participação do mercado.
+  </div>
+
+  <h3>Fase externa</h3>
+  <p>Inicia com a publicação do edital. A sequência é: publicação → habilitação/propostas → julgamento → adjudicação → homologação.</p>
+  <div class="bizu">
+    <div class="bizu-titulo">Bizu — Adjudicação x Homologação</div>
+    <strong>Adjudicação</strong> = atribui o objeto ao vencedor (quem julga é o pregoeiro ou a comissão).<br>
+    <strong>Homologação</strong> = confirma a validade do procedimento (quem homologa é a autoridade <strong>competente/superior</strong>, não o pregoeiro).<br>
+    Ordem: adjudicação → homologação → contrato.
+  </div>
+  <div class="prova">Prova 2021 Q29: cobrou que homologação é atribuída à autoridade competente (não ao presidente da comissão) e que é etapa FINAL (não inicial) — gabarito D.</div>
+
+  <h3>Habilitação</h3>
+  <p>Na Lei 14.133/2021, a Administração pode escolher realizar a habilitação antes OU depois do julgamento das propostas. Isso é diferente da Lei 8.666/93, onde a habilitação era sempre antes do julgamento.</p>
+
+  <h3>Critérios de julgamento</h3>
+  <table>
+    <tr><th>Critério</th><th>Quando usar</th></tr>
+    <tr><td>Menor preço</td><td>Regra geral — bens e serviços</td></tr>
+    <tr><td>Maior desconto</td><td>Quando há tabela de preços prévia</td></tr>
+    <tr><td>Melhor técnica ou conteúdo artístico</td><td>Concurso / serviços intelectuais</td></tr>
+    <tr><td>Técnica e preço</td><td>Ponderação de qualidade e custo</td></tr>
+    <tr><td>Maior retorno econômico</td><td>Contratos de eficiência</td></tr>
+    <tr><td>Maior lance</td><td>Leilão</td></tr>
+  </table>
+  <div class="atencao">
+    <div class="atencao-titulo">Distrator clássico</div>
+    "Melhor regularidade técnica" NÃO é critério de julgamento previsto na lei. Foi o distrator da prova 2021 Q40 — gabarito B.
+  </div>
+</div>
+
+<!-- 7.5 CONTRATAÇÃO DIRETA -->
+<div class="secao" id="s4">
+  <div class="secao-titulo">7.5 — Contratação direta</div>
+  <div class="secao-ref">Lei 14.133/2021, arts. 74 e 75</div>
+
+  <div class="lei">
+    <div class="lei-titulo">Lei seca — art. 74 (inexigibilidade)</div>
+    É inexigível a licitação quando inviável a competição, em especial nos casos de:<br>
+    I — aquisição de materiais, equipamentos ou gêneros que só possam ser fornecidos por produtor, empresa ou representante comercial exclusivo;<br>
+    II — contratação de serviço técnico especializado de natureza predominantemente intelectual com profissionais ou empresas de notória especialização;<br>
+    III — contratação de profissional do setor artístico, diretamente ou por meio de empresário exclusivo.
+  </div>
+
+  <div class="lei">
+    <div class="lei-titulo">Lei seca — art. 75 (dispensa)</div>
+    É dispensável a licitação [...] (rol taxativo de hipóteses incluindo valores pequenos, emergência, calamidade, guerra, intervenção no domínio econômico, entre outros).
+  </div>
+
+  <table>
+    <tr><th></th><th>Inexigibilidade — art. 74</th><th>Dispensa — art. 75</th></tr>
+    <tr><td><strong>Fundamento</strong></td><td>Competição IMPOSSÍVEL</td><td>Competição possível, mas inconveniente</td></tr>
+    <tr><td><strong>Rol</strong></td><td><strong>Exemplificativo</strong></td><td><strong>Taxativo</strong></td></tr>
+    <tr><td><strong>Palavra-chave</strong></td><td>Inviabilidade</td><td>Inconveniência / desnecessidade</td></tr>
+  </table>
+
+  <div class="macete">
+    <div class="macete-titulo">Macete — INEX x DISP</div>
+    <strong>INEX</strong>igibilidade = <strong>INEX</strong>istência de competição (impossível competir).<br>
+    <strong>Disp</strong>ensa = competição existe, mas a Adm <strong>disp</strong>ensa (prefere contratar direto por conveniência legal).
+  </div>
+
+  <div class="bizu">
+    <div class="bizu-titulo">Bizu — Rol exemplificativo vs taxativo</div>
+    Inexigibilidade: rol exemplificativo — qualquer situação de inviabilidade real serve, mesmo que não esteja nos incisos.<br>
+    Dispensa: rol taxativo — só pode dispensar nos casos expressamente previstos na lei. Fora da lista = obrigado a licitar.
+  </div>
+
+  <h3>Dispensa emergencial — art. 75, VIII</h3>
+  <div class="lei">
+    <div class="lei-titulo">Requisitos da dispensa emergencial</div>
+    1. Situação emergencial real — não pode ser "fabricada" ou "provocada" pelo próprio agente<br>
+    2. Contratação limitada aos bens/serviços necessários ao atendimento da emergência<br>
+    3. Prazo máximo: 1 ano — vedada prorrogação
+  </div>
+  <div class="atencao">
+    <div class="atencao-titulo">Distrator — emergência fabricada</div>
+    "A contratação emergencial é cabível mesmo quando a urgência foi criada pelo agente público" — FALSO. A emergência "fabricada" invalida a dispensa. Prova 2021 Q27.
+  </div>
+</div>
+
+<!-- 7.6 PROCEDIMENTOS AUXILIARES -->
+<div class="secao" id="s5">
+  <div class="secao-titulo">7.6 — Procedimentos auxiliares</div>
+  <div class="secao-ref">Lei 14.133/2021, arts. 78, 79 e 82</div>
+
+  <div class="explicacao">
+    <div class="explicacao-titulo">Explicação</div>
+    Procedimentos auxiliares não são modalidades de licitação — são mecanismos que auxiliam as licitações e contratações. Essa distinção é cobrada diretamente.
+  </div>
+
+  <table>
+    <tr><th>Procedimento</th><th>Finalidade</th><th>Art.</th></tr>
+    <tr><td><strong>Catálogo eletrônico de padronização</strong></td><td>Padronizar itens adquiridos pela Administração</td><td>78</td></tr>
+    <tr><td><strong>Credenciamento</strong></td><td>Chamamento sem competição — todos os habilitados podem ser contratados</td><td>79</td></tr>
+    <tr><td><strong>Pré-qualificação</strong></td><td>Seleção prévia de licitantes que atendam requisitos mínimos</td><td>80</td></tr>
+    <tr><td><strong>PMI — Proc. de Manifestação de Interesse</strong></td><td>Setor privado propõe estudos e projetos à Administração</td><td>81</td></tr>
+    <tr><td><strong>SRP — Sistema de Registro de Preços</strong></td><td>Registro de preços para futuras contratações discricionárias</td><td>82</td></tr>
+  </table>
+
+  <div class="atencao">
+    <div class="atencao-titulo">Distrator — prova 2023 Q24</div>
+    "Registro inicial qualificado" NÃO existe na Lei 14.133/2021. Foi o distrator da prova 2023 Q24 — gabarito D. Os 5 procedimentos auxiliares são os da tabela acima.
+  </div>
+
+  <div class="bizu">
+    <div class="bizu-titulo">Bizu — Credenciamento</div>
+    No credenciamento, não há competição entre os participantes — todos que satisfazerem os requisitos são credenciados e podem ser contratados. Exemplo clássico: credenciamento de médicos para o SUS. Por isso não é modalidade — não há "vencedor".
+  </div>
+</div>
+
+<!-- 7.7 CONTRATOS -->
+<div class="secao" id="s6">
+  <div class="secao-titulo">7.7 — Contratos administrativos</div>
+  <div class="secao-ref">Lei 14.133/2021</div>
+
+  <h3>Características</h3>
+  <table>
+    <tr><th>Característica</th><th>Explicação</th></tr>
+    <tr><td><strong>Formalismo</strong></td><td>Escritos, publicados em diário oficial</td></tr>
+    <tr><td><strong>Comutatividade</strong></td><td>Prestações equivalentes e predetermináveis</td></tr>
+    <tr><td><strong>Instabilidade</strong></td><td>Administração pode alterá-los unilateralmente</td></tr>
+    <tr><td><strong>Verticalidade</strong></td><td>Adm em posição de supremacia — não há igualdade</td></tr>
+  </table>
+  <div class="atencao">
+    <div class="atencao-titulo">Distrator — prova 2022 Q22</div>
+    "Horizontalidade" foi apresentado como característica — FALSO. Contratos administrativos são marcados pela <strong>verticalidade</strong> (supremacia da Adm). Horizontalidade caracteriza os contratos privados.
+  </div>
+
+  <h3>Prazo máximo — serviços contínuos</h3>
+  <div class="lei">
+    <div class="lei-titulo">Lei 14.133/2021</div>
+    Serviços e fornecimentos contínuos: prazo máximo de <strong>10 anos</strong> (incluídas prorrogações).
+  </div>
+  <div class="macete">
+    <div class="macete-titulo">Macete — mudança em relação à 8.666</div>
+    Lei 8.666: 60 meses + 12 meses excepcionais = 72 meses máximo.<br>
+    Lei 14.133: <strong>10 anos</strong> (120 meses) = quase o dobro.<br>
+    Prova 2023 Q25 cobrou exatamente: "10 anos" — gabarito A.
+  </div>
+
+  <h3>Prazo certo x Escopo</h3>
+  <table>
+    <tr><th></th><th>Por prazo certo</th><th>Por escopo</th></tr>
+    <tr><td>Extinção</td><td>Com o advento do termo final</td><td>Com o cumprimento do objeto</td></tr>
+    <tr><td>Prazo importa para</td><td>Tudo — é o elemento central</td><td>Apurar mora do contratado</td></tr>
+    <tr><td>Exemplo</td><td>Serviços de limpeza</td><td>Obras de engenharia</td></tr>
+  </table>
+  <div class="bizu">
+    <div class="bizu-titulo">Bizu — escopo</div>
+    No contrato por escopo, ultrapassado o prazo, o contratado continua obrigado a entregar — mas responde pelos ônus do atraso. O prazo não extingue o contrato. Cobrado nas provas 2021 Q31 e 2023 Q37.
+  </div>
+
+  <h3>Equilíbrio econômico-financeiro — 3 mecanismos</h3>
+  <table>
+    <tr><th>Mecanismo</th><th>Para que serve</th><th>Prazo mínimo</th></tr>
+    <tr><td><strong>Reajuste</strong></td><td>Fatos previsíveis — inflação por índice contratual</td><td>12 meses da proposta</td></tr>
+    <tr><td><strong>Revisão / Reequilíbrio</strong></td><td>Fatos imprevisíveis que alterem o equilíbrio</td><td>Sem prazo mínimo</td></tr>
+    <tr><td><strong>Repactuação</strong></td><td>Serviços com mão de obra exclusiva — variação de custos trabalhistas</td><td>12 meses</td></tr>
+  </table>
+  <div class="atencao">
+    <div class="atencao-titulo">Distrator clássico</div>
+    "Atualização exorbitante" NÃO existe como mecanismo legal — foi o gabarito da prova 2021 Q30 (o que NÃO é mecanismo).
+  </div>
+
+  <h3>Sanções contratuais</h3>
+  <div class="lei">
+    <div class="lei-titulo">Lei 14.133/2021 — 4 sanções</div>
+    I — Advertência<br>
+    II — Multa (pode ser cumulada com as demais)<br>
+    III — Impedimento de licitar e contratar — até <strong>3 anos</strong><br>
+    IV — Declaração de inidoneidade — <strong>3 a 6 anos</strong>
+  </div>
+  <div class="macete">
+    <div class="macete-titulo">Macete — O que NÃO existe</div>
+    "Admoestação verbal" — NÃO existe. Prova 2021 Q33 perguntou o que NÃO é sanção — gabarito C (admoestação verbal).<br>
+    Na Lei 8.666: impedimento era até 2 anos. Na Lei 14.133: até <strong>3 anos</strong>.
+  </div>
+</div>
+
+<!-- 7.8 FISCALIZAÇÃO -->
+<div class="secao" id="s7">
+  <div class="secao-titulo">7.8 — Gestão e fiscalização dos contratos</div>
+  <div class="secao-ref">Lei 14.133/2021, art. 117</div>
+
+  <div class="explicacao">
+    <div class="explicacao-titulo">Atenção</div>
+    Este foi o tema mais cobrado nas provas anteriores (8 questões em 2022 sobre o Decreto 45.600/2016). Para 2026, a referência mudou para o art. 117 da Lei 14.133/2021. O conteúdo é estruturalmente semelhante, mas a lei é outra.
+  </div>
+
+  <h3>Gestor x Fiscal — distinção fundamental</h3>
+  <table>
+    <tr><th></th><th>Gestor do contrato</th><th>Fiscal do contrato</th></tr>
+    <tr><td>Função</td><td>Coordena os fiscais e gerencia o contrato como um todo</td><td>Acompanha a execução do objeto no dia a dia</td></tr>
+    <tr><td>Tarefas típicas</td><td>Encaminha processos de alteração, reajuste, prorrogação à autoridade superior</td><td>Registra ocorrências, verifica qualidade, comunica irregularidades</td></tr>
+  </table>
+
+  <div class="lei">
+    <div class="lei-titulo">Vedações na designação — art. 117</div>
+    É vedada a designação de agente público para gestor ou fiscal que:<br>
+    · Tenha sido apenado em processo administrativo com sanção não cumprida<br>
+    · Tenha em seus registros punições por atos lesivos ao patrimônio público<br>
+    · Esteja litigando com preposto, gerente ou sócio da contratada<br>
+    · Seja parente próximo dos administradores da empresa contratada<br>
+    · Exerça função incompatível com as designadas<br>
+    · Seja estagiário ou terceirizado
+  </div>
+
+  <div class="atencao">
+    <div class="atencao-titulo">Distrator — prova 2022 Q15</div>
+    "Esteja litigando exclusivamente na esfera administrativa" — FALSO. O litígio em QUALQUER esfera (administrativa ou judicial) gera impedimento. A palavra "exclusivamente" tornava o item falso.
+  </div>
+
+  <h3>Atribuições do fiscal</h3>
+  <ul>
+    <li>Registrar todas as ocorrências (inspeções, faltas, providências, soluções)</li>
+    <li>Verificar especificações técnicas, prazos e qualidade</li>
+    <li>Receber reclamações sobre qualidade do material ou serviço</li>
+    <li>Comunicar irregularidades à autoridade competente</li>
+    <li>Em obras de engenharia: registrar no Diário de Obras</li>
+    <li>Pode enviar representantes ao local — presença pessoal pode ser exigida conforme o objeto</li>
+  </ul>
+  <div class="atencao">
+    <div class="atencao-titulo">Distrator — prova 2021 Q38</div>
+    "O fiscal pode enviar representantes, não sendo necessária sua presença pessoal" — INCORRETO. Em determinadas situações, a presença pessoal é exigida. Gabarito B.
+  </div>
+
+  <h3>Instrumentos da gestão</h3>
+  <div class="lei">
+    <div class="lei-titulo">3 instrumentos principais</div>
+    <strong>Registro de Ocorrências:</strong> livro/caderno físico ou eletrônico com todos os eventos da execução contratual.<br><br>
+    <strong>Acordo de Níveis de Serviço (ANS):</strong> estabelece indicadores objetivos de resultado — permite adequar o pagamento ao que foi efetivamente entregue.<br><br>
+    <strong>TR ou PB:</strong> elaborados por técnicos com qualificação pertinente ao objeto contratado.
+  </div>
+
+  <div class="bizu">
+    <div class="bizu-titulo">Bizu — terceiros auxiliando o fiscal</div>
+    A Administração pode contratar terceiros para auxiliar o fiscal com informações especializadas. Mas isso NÃO transfere nem exime as responsabilidades do fiscal — ele continua responsável pelas providências. Prova 2022 Q14 cobrou que a contratação de terceiros "não exime as atribuições dos gestores e fiscais".
+  </div>
+</div>
+
+<!-- 7.9 APOSTILAMENTO -->
+<div class="secao" id="s8">
+  <div class="secao-titulo">7.9 — Apostilamento</div>
+  <div class="secao-ref">Lei 14.133/2021, art. 136</div>
+
+  <div class="lei">
+    <div class="lei-titulo">Lei seca — art. 136</div>
+    As alterações unilaterais a que se refere o inciso I do caput do art. 124 desta Lei, quando realizadas por simples apostila, não gerarão direito a alteração dos preços contratados. O apostilamento poderá ser realizado por certidão ou registro nos autos do processo administrativo.<br><br>
+    São registráveis por apostilamento:<br>
+    I — variação do valor contratual decorrente de reajuste previsto no próprio contrato;<br>
+    II — atualização dos dados cadastrais do contratado;<br>
+    III — alterações de dotação orçamentária;<br>
+    IV — empenho de dotações orçamentárias suplementares.
+  </div>
+
+  <div class="explicacao">
+    <div class="explicacao-titulo">Explicação</div>
+    Apostilamento é uma anotação simples no próprio contrato — mais rápido e informal que o termo aditivo. Só é usado para mudanças que NÃO alteram o objeto, o prazo ou as obrigações das partes. Para qualquer mudança substancial: termo aditivo.
+  </div>
+
+  <div class="macete">
+    <div class="macete-titulo">Macete — Apostilamento x Aditivo</div>
+    <strong>APOSTILAMENTO:</strong> reajuste automático, dados cadastrais, dotação orçamentária. "Coisas burocráticas que não mudam o contrato."<br>
+    <strong>ADITIVO:</strong> mudança de objeto, prazo, preço (fora do reajuste automático), obrigações. "Coisas que mudam o contrato de verdade."
+  </div>
+
+  <div class="bizu">
+    <div class="bizu-titulo">Bizu de prova</div>
+    Se a questão apresentar apostilamento para mudança de prazo ou objeto — ERRADO. Se apresentar para reajuste automático previsto no contrato — CORRETO. Este tema nunca caiu nas provas anteriores mas está explícito no edital 2026 — atenção redobrada.
+  </div>
+</div>
+
+<!-- 7.10 ORÇAMENTO -->
+<div class="secao" id="s9">
+  <div class="secao-titulo">7.10 — Orçamento público</div>
+  <div class="secao-ref">Lei Estadual 287/79, arts. 83 a 94</div>
+
+  <div class="atencao">
+    <div class="atencao-titulo">Atenção</div>
+    Este conteúdo nunca foi cobrado nas provas anteriores do QOE/QOA, mas está explicitamente previsto no edital 2026. Alta probabilidade de estrear em 2026.
+  </div>
+
+  <h3>Fases de execução da despesa pública</h3>
+  <div class="lei">
+    <div class="lei-titulo">Lei 287/79 — 3 fases obrigatórias</div>
+    <strong>1ª — EMPENHO:</strong> ato emanado de autoridade competente que cria para o Estado obrigação de pagamento, pendente ou não de implemento de condição. Reserva o valor na dotação orçamentária.<br><br>
+    <strong>2ª — LIQUIDAÇÃO:</strong> verificação do direito adquirido pelo credor com base em títulos e documentos. Confirma que a entrega ocorreu conforme contratado.<br><br>
+    <strong>3ª — PAGAMENTO:</strong> entrega dos recursos ao credor. Extingue a obrigação.
+  </div>
+
+  <div class="macete">
+    <div class="macete-titulo">Macete — ELP</div>
+    <strong>E</strong>mpenho → <strong>L</strong>iquidação → <strong>P</strong>agamento<br>
+    Pense: primeiro você <strong>empenha</strong> a palavra (reserva), depois <strong>liquida</strong> a dívida (confere), depois <strong>paga</strong> (quita).
+  </div>
+
+  <div class="bizu">
+    <div class="bizu-titulo">Bizu fundamental</div>
+    Não existe pagamento sem empenho prévio. O empenho é sempre o primeiro passo — é a autorização de gasto. Questão que inverta a ordem (liquidação antes de empenho, ou pagamento antes de liquidação) = ERRADO.
+  </div>
+
+  <h3>Créditos orçamentários e adicionais</h3>
+  <div class="lei">
+    <div class="lei-titulo">Tipos de crédito</div>
+    <strong>Crédito orçamentário:</strong> dotação incluída na LOA — autorização base de gasto.<br><br>
+    <strong>Créditos adicionais</strong> — despesas não previstas ou insuficientemente dotadas na LOA:<br>
+    · <strong>Suplementares:</strong> reforçam dotação já existente. Abertos por decreto (com autorização prévia na LOA).<br>
+    · <strong>Especiais:</strong> para despesas sem dotação específica. Exigem lei específica.<br>
+    · <strong>Extraordinários:</strong> para despesas urgentes e imprevisíveis (guerra, calamidade, comoção). Abertos por decreto ou medida provisória — SEM necessidade de indicação de fonte.
+  </div>
+
+  <table>
+    <tr><th>Tipo</th><th>Para que serve</th><th>Como abrir</th><th>Fonte de recursos</th></tr>
+    <tr><td><strong>Suplementar</strong></td><td>Reforçar dotação existente</td><td>Decreto (com autorização na LOA)</td><td>Obrigatória</td></tr>
+    <tr><td><strong>Especial</strong></td><td>Despesa sem dotação</td><td>Lei específica</td><td>Obrigatória</td></tr>
+    <tr><td><strong>Extraordinário</strong></td><td>Urgência imprevisível</td><td>Decreto ou MP</td><td><strong>Dispensada</strong></td></tr>
+  </table>
+
+  <div class="macete">
+    <div class="macete-titulo">Macete — Crédito Extraordinário</div>
+    É o único que <strong>dispensa</strong> indicação de fonte de recursos — exatamente porque é para emergências em que não há tempo de fazer o planejamento orçamentário. "Quando pega fogo, você apaga primeiro e presta contas depois."
+  </div>
+
+  <h3>Fontes de recursos para créditos adicionais</h3>
+  <ul>
+    <li>Superávit financeiro do exercício anterior</li>
+    <li>Excesso de arrecadação</li>
+    <li>Anulação parcial ou total de dotações orçamentárias</li>
+    <li>Operações de crédito autorizadas em lei</li>
+  </ul>
+</div>
+
+</div>
+
+<button class="progresso-btn" id="prog-btn" onclick="marcarLido()">Marcar como lido ✓</button>
+
+<script>
+let atual=0;
+const tabs=document.querySelectorAll('.nav-tab');
+const secoes=document.querySelectorAll('.secao');
+
+function ir(i){
+  atual=i;
+  tabs.forEach((t,idx)=>t.className='nav-tab'+(idx===i?' ativo':''));
+  secoes.forEach((s,idx)=>s.className='secao'+(idx===i?' ativa':''));
+  const pct=parseInt(localStorage.getItem('abs_'+i)||'0');
+  const btn=document.getElementById('prog-btn');
+  btn.textContent=pct>=100?'Lido ✓':'Marcar como lido ✓';
+  btn.style.background=pct>=100?'#27500A':'var(--verde)';
+  window.scrollTo(0,0);
+}
+
+function marcarLido(){
+  localStorage.setItem('abs_'+atual,'100');
+  const btn=document.getElementById('prog-btn');
+  btn.textContent='Lido ✓';
+  btn.style.background='#27500A';
+}
+
+// init
+const pct0=parseInt(localStorage.getItem('abs_0')||'0');
+const btn0=document.getElementById('prog-btn');
+btn0.textContent=pct0>=100?'Lido ✓':'Marcar como lido ✓';
+btn0.style.background=pct0>=100?'#27500A':'var(--verde)';
+</script>
+</body>
+</html>
